@@ -1,53 +1,39 @@
-const Gallery = require('../model/gallery');
-const Blog = require('../model/blog');
+const Category = require('../model/category');
+const Subcategory = require('../model/subcategory');
+const Product = require('../model/product');
 const Customer = require('../model/customer');
+const Order = require('../model/order');
+
+
+exports.getCategory = (req, res, next) => {
+    Category.find()
+    .then(result => {
+        res.status(200).json({
+            data:result
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.json({
+            error:err
+        })
+    })
+}
+
+
+
+
 
 //Blog
-exports.getBlog = (req, res, next) => {
-    Blog.find()
+exports.getSubcategoryByCategory = (req, res, next) => {
+    const category = req.body.category;
+    Subcategory.find({"category" : `${category}`})
     .then(result => {
-        res.status(200).json({
-            data:result
-        })
-    })
-    .catch(err => {
-        console.log(err);
-        res.json({
-            error:err
-        })
-    })
-}
-
-exports.getBlogCategory = (req, res, next) => {
-    Blog.distinct("category")
-    .then(result => {
-        console.log(result);
-        res.status(200).json({
-            category : result
-        })
-    })
-}
-
-
-exports.getBlogByCategory = (req, res, next) => {
-    const category = req.params.category;
-    Blog.find({"category":`${category}`})
-    .then(result => {
-    console.log(result)
-    res.status(200).json({
-      data : result
-    });
-  })
-  .catch(err => {
-    console.log(err)
-  })
-}
-
-//Gallery
-
-exports.getGallery = (req, res, next) => {
-    Gallery.find()
-    .then(result => {
+        if(!result){
+            const error = new Error('Could not find');
+            error.statusCode = 404;
+            throw error;
+          }
         res.status(200).json({
             data:result
         })
@@ -61,51 +47,90 @@ exports.getGallery = (req, res, next) => {
 }
 
 
-exports.getGalleryCategory = (req, res, next) => {
-    Gallery.distinct("category")
+
+
+
+//Product
+
+exports.getProduct = (req, res, next) => {
+    Product.find()
     .then(result => {
-        console.log(result);
         res.status(200).json({
-            category : result
+            data:result
         })
     })
 }
 
-exports.getGalleryByCategory = (req, res, next) => {
-    const category = req.params.category;
-    Gallery.find({"category":`${category}`})
+exports.getProductById = (req, res, next) => {
+    const _id = req.params._id;
+    Product.findById(_id)
     .then(result => {
-    console.log(result)
-    res.status(200).json({
-      data : result
-    });
-  })
-  .catch(err => {
-    console.log(err)
-  })
+        if(!result){
+            const error = new Error('Could not find');
+            error.statusCode = 404;
+            throw error;
+          }
+        res.status(200).json({
+            data:result
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.json({
+            error:err
+        })
+    })
 }
+
+exports.getProductBySubcategory= (req, res, next) => {
+    const subcategory = req.params.subcategory;
+    Product.findById({"subcategory" : `${subcategory}`})
+    .then(result => {
+        if(!result){
+            const error = new Error('Could not find');
+            error.statusCode = 404;
+            throw error;
+          }
+        res.status(200).json({
+            data:result
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.json({
+            error:err
+        })
+    })
+}
+
+
+//Cart
+
+
+
+
+//Orders
+
+exports.getOrdersById = (req, res, next) => {
+    const _id = req.params._id;
+    Order.findById(_id)
+    .then(result => {
+        if(!result){
+            const error = new Error('Could not find');
+            error.statusCode = 404;
+            throw error;
+        }
+        res.status(200).json({
+            data:result
+        })
+    })
+}
+
 
 
 
 //Customer
 
-exports.insertCustomer = (req, res, next) => {
-    const name = req.body.name;
-    const email = req.body.email;
-    const phonenum = req.body.phonenum;
-    const message = req.body.message;
 
-    const list = new Customer({
-        name:name,
-        email:email,
-        phonenum:phonenum,
-        message:message
-    })
-
-    list.save()
-    .then(result => {
-        res.status(200).json({
-            data:result
-        })
-    })
-}
+//Counting
+  

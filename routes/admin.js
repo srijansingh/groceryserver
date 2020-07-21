@@ -1,27 +1,37 @@
 
 const express = require('express');
+
 const {
-    insertGallery,getGallery,deleteGalleryById,
-    insertBlog,getBlog,getBlogById,deleteBlogById,
-    insertCustomer,getAllCustomer
+    createCategory,getCategory,deleteCategoryById,
+    createSubcategory,getSubcategory,deleteSubcategoryById,
+    createProduct, getProduct, getProductById, updateProduct, deleteProductById,
+    getOrders,updateOrder,
+    getAllCustomer
 } = require('../controller/admin');
 
 const router = express.Router();
 
-//Gallery 
-router.post('/gallery', insertGallery);
-router.get('/gallery', getGallery);
-router.delete('/gallery/:_id', deleteGalleryById);
+//Category
+router.post('/category', createCategory);
+router.get('/category', getCategory);
+router.delete('/category/:_id', deleteCategoryById);
 
+//Subcategory
+router.post('/subcategory', createSubcategory);
+router.get('/subcategory', getSubcategory);
+router.delete('/subcategory/:_id', deleteSubcategoryById);
 
-//blog
-router.post('/blog', insertBlog);
-router.get('/blog', getBlog);
-router.get('/blog/:_id', getBlogById);
-router.delete('/blog/:_id', deleteBlogById);
+//Product
+router.post('/product', createProduct);
+router.get('/product', getProduct);
+router.get('/product/:_id', getProductById);
+router.put('/product', updateProduct);
+router.delete('/product', deleteProductById);
 
-//Customer
-router.post('/customer', insertCustomer);
+//Order
+router.get('/order', getOrders);
+router.put('/order', updateOrder);
+
 router.get('/customer', getAllCustomer)
 
 module.exports = router;
