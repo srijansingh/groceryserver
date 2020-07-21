@@ -7,6 +7,8 @@ const authRoute = require('./routes/auth');
 const adminRoute = require('./routes/admin');
 const userRoute = require('./routes/client');
 
+const isAdmin = require('./middleware/isAdmin');
+
 
 const app = express();
 

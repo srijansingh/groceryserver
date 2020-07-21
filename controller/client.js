@@ -3,7 +3,7 @@ const Subcategory = require('../model/subcategory');
 const Product = require('../model/product');
 const Customer = require('../model/customer');
 const Order = require('../model/order');
-const Customer = require('../model/customer');
+
 
 //Signup
 
@@ -78,7 +78,7 @@ exports.getCategory = (req, res, next) => {
 
 //Blog
 exports.getSubcategoryByCategory = (req, res, next) => {
-    const category = req.body.category;
+    const category = req.params._id;
     Subcategory.find({"category" : `${category}`})
     .then(result => {
         if(!result){
@@ -135,8 +135,8 @@ exports.getProductById = (req, res, next) => {
 }
 
 exports.getProductBySubcategory= (req, res, next) => {
-    const subcategory = req.params.subcategory;
-    Product.findById({"subcategory" : `${subcategory}`})
+    const subcategory = req.params._id;
+    Product.find({"subcategory" : `${subcategory}`})
     .then(result => {
         if(!result){
             const error = new Error('Could not find');

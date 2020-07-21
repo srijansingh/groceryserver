@@ -20,11 +20,13 @@ const schema = new Schema(
             required: true
         },
         category: {
-            type:String,
+            type: Schema.Types.ObjectId,
+            ref: 'Category',
             required: true
         },
         subcategory: {
-            type:String,
+            type: Schema.Types.ObjectId,
+            ref: 'Subcategory',
             required: true
         },
         costprice: {

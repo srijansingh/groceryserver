@@ -9,13 +9,20 @@ const schema = new Schema(
             required: true
         },
         category: {
-            type:String,
+            type: Schema.Types.ObjectId,
+            ref: 'Category',
             required: true
         },
         imageurl:{
             type:String,
             required: true
-        }
+        },
+        products : [
+            {
+                type : Schema.Types.ObjectId,
+                ref : 'Product'
+            }
+        ]
     },
     {
         timestamps:true

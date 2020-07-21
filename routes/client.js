@@ -1,4 +1,6 @@
 const express = require('express');
+const {body} = require('express-validator');
+
 const {
     getCategory,getSubcategoryByCategory,
     getProduct, getProductById,getProductBySubcategory,
@@ -37,11 +39,11 @@ router.put('/signup', [
 
 //Category
 router.get('/category', getCategory);
-router.get('/subcategory/:category', getSubcategoryByCategory);
+router.get('/category/:_id', getSubcategoryByCategory);
 
 router.get('/product', getProduct);
 router.get('/product/:_id', getProductById);
-router.get('/product/sub/:subcategory', getProductBySubcategory);
+router.get('/sub/:_id', getProductBySubcategory);
 
 
 

@@ -11,7 +11,19 @@ const schema = new Schema(
         imageurl:{
             type:String,
             required: true
-        }
+        },
+        subcategory : [
+            {
+                type : Schema.Types.ObjectId,
+                ref : 'Subcategory'
+            }
+        ],
+        products : [
+            {
+                type : Schema.Types.ObjectId,
+                ref : 'Product'
+            }
+        ]
     },
     {
         timestamps:true

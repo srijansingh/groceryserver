@@ -10,7 +10,7 @@ exports.createCategory = (req, res, next) => {
 
     const list = new Category({
         category:category,
-        imagelink:imageurl
+        imageurl:imageurl
     })
 
     list.save()
@@ -57,24 +57,33 @@ exports.deleteCategoryById = (req,res,next) => {
 //Blog
 exports.createSubcategory = (req, res, next) => {
     const subcategory = req.body.subcategory;
-    const category = req.body.category;
+    const categoryid = req.body.categoryid;
     const imageurl = req.body.imageurl;
-
+    let cat;
     const list = new Subcategory({
         subcategory:subcategory,
-        category:category,
-        imagelink:imageurl
+        category:categoryid,
+        imageurl:imageurl
     })
 
     list.save()
+    .then(res => {
+        return Category.findById(categoryid);
+    })
+    .then(category => {
+        category.subcategory.push(list);
+        return category.save();
+    })
     .then(result => {
         res.status(200).json({
-            data:result
+            message:"Subcategory Added",
+            data:result,
+            category:cat
         })
     })
     
 }
-
+ 
 exports.getSubcategory = (req, res, next) => {
     Subcategory.find()
     .then(result => {
@@ -115,11 +124,11 @@ exports.createProduct = (req, res, next) => {
     const title = req.body.title;
     const imageurl = req.body.imageurl;
     const description = req.body.description;
-    const category = req.body.category;
-    const subcategory = req.body.subcategory;
+    const category = req.body.categoryid;
+    const subcategory = req.body.subcategoryid;
     const costprice = req.body.costprice;
     const sellingprice = req.body.sellingprice;
-    const discount = (sellingprice - costprice) / 100;
+    const discount = (costprice - sellingprice) / 100;
 
 
     const list = new Product({
@@ -135,9 +144,23 @@ exports.createProduct = (req, res, next) => {
     })
 
     list.save()
+    .then(res => {
+        Category.findById(req.body.categoryid)
+        .then(category => {
+            category.products.push(list);
+           category.save();
+        });
+
+        Subcategory.findById(req.body.subcategoryid)
+        .then(subcategory => {
+            subcategory.products.push(list);
+            subcategory.save();
+        });
+    })
     .then(result => {
         res.status(200).json({
-            data:result
+            message : "Product Added",
+            data:list
         })
     })
 }
