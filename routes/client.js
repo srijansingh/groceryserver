@@ -1,25 +1,49 @@
 const express = require('express');
 const {
-    getBlog,getBlogCategory,getBlogByCategory,
-    getGallery, getGalleryCategory, getGalleryByCategory,
-    insertCustomer
+    getCategory,getSubcategoryByCategory,
+    getProduct, getProductById,getProductBySubcategory,
+    createCustomer
 } = require('../controller/client');
 
+const Customer = require('../model/customer');
 const router = express.Router();
 
-//Gallery 
-router.get('/gallery', getGallery);
-router.get('/category/gallery', getGalleryCategory);
-router.get('/category/gallery/:category', getGalleryByCategory);
+//Signup
 
-//blog
-router.get('blog', getBlog);
-router.get('/category/blog', getBlogCategory);
-router.get('/category/blog/:category', getBlogByCategory);
- 
+router.put('/signup', [
+    body('email')
+    .isEmail()
+    .withMessage('Please enter a valid email.')
+    .custom((value, {req}) => {
+        return Customer.findOne({email: value})
+        .then(userDoc => {
+            if(userDoc) {
+                return Promise.reject('E-mail already exist');
+            }
+        })
+    })
+    .normalizeEmail(),
 
-//Customer
-router.post('/customer', insertCustomer);
+
+    body('pincode').trim().isLength({min:6}),
+    body('name').trim().not().isEmpty(),
+    body('address').trim().not().isEmpty(),
+    body('pincode').trim().not().isEmpty(),
+    body('city').trim().not().isEmpty(),
+    body('state').trim().not().isEmpty()
+
+], createCustomer);
+
+
+//Category
+router.get('/category', getCategory);
+router.get('/subcategory/:category', getSubcategoryByCategory);
+
+router.get('/product', getProduct);
+router.get('/product/:_id', getProductById);
+router.get('/product/sub/:subcategory', getProductBySubcategory);
+
+
 
 
 module.exports = router;
