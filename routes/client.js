@@ -2,7 +2,7 @@ const express = require('express');
 const {body} = require('express-validator');
 
 const {
-    getCategory,getSubcategoryByCategory,
+    getCategory,getSubcategoryByCategory,getProductByCategory,
     getProduct, getProductById,getProductBySubcategory,
     createCustomer
 } = require('../controller/client');
@@ -54,6 +54,7 @@ router.get('/category', getCategory);
 router.get('/category/:_id', getSubcategoryByCategory);
 router.get('/product', getProduct);
 router.get('/product/:_id', getProductById);
+router.get('/product/category/:_id', getProductByCategory);
 router.get('/product/sub/:_id', getProductBySubcategory);
 
 

@@ -73,7 +73,26 @@ exports.getCategory = (req, res, next) => {
 }
 
 
-
+exports.getProductByCategory = (req, res, next) => {
+    const category = req.params._id;
+    Product.find({"category" : `${category}`})
+    .then(result => {
+        if(!result){
+            const error = new Error('Could not find');
+            error.statusCode = 404;
+            throw error;
+          }
+        res.status(200).json({
+            data:result
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.json({
+            error:err
+        })
+    })
+}
 
 
 //Blog
