@@ -4,11 +4,12 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
     {
-        orderid:{
-            type:String,
-            require:true
+        user : {
+            type: Schema.Types.ObjectId,
+            ref: 'Customer',
+            require : true
         },
-        userid:{
+        refid:{
             type:String,
             require:true
         },

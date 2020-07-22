@@ -54,7 +54,8 @@ exports.deleteCategoryById = (req,res,next) => {
 }
 
 
-//Blog
+//Subcategory
+
 exports.createSubcategory = (req, res, next) => {
     const subcategory = req.body.subcategory;
     const categoryid = req.body.categoryid;
@@ -81,7 +82,6 @@ exports.createSubcategory = (req, res, next) => {
             category:cat
         })
     })
-    
 }
  
 exports.getSubcategory = (req, res, next) => {

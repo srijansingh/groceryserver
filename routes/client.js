@@ -25,12 +25,23 @@ router.put('/signup', [
         })
     })
     .normalizeEmail(),
+    
+    body('mobile')
+    .isNumeric()
+    .isLength(10)
+    .withMessage('Please enter valid number.')
+    .custom((value, {req}) => {
+        return Customer.findOne({mobile: value})
+        .then(userMob => {
+            if(userMob){
+                return Promise.reject('Phone number already exist');
+            }
+        })
+    }),
 
-
-    body('pincode').trim().isLength({min:6}),
+    body('pincode').trim().isLength(6).withMessage('Please enter valid pincode'),
     body('name').trim().not().isEmpty(),
     body('address').trim().not().isEmpty(),
-    body('pincode').trim().not().isEmpty(),
     body('city').trim().not().isEmpty(),
     body('state').trim().not().isEmpty()
 
@@ -38,14 +49,12 @@ router.put('/signup', [
 
 
 //Category
+
 router.get('/category', getCategory);
 router.get('/category/:_id', getSubcategoryByCategory);
-
 router.get('/product', getProduct);
 router.get('/product/:_id', getProductById);
-router.get('/sub/:_id', getProductBySubcategory);
-
-
+router.get('/product/sub/:_id', getProductBySubcategory);
 
 
 module.exports = router;

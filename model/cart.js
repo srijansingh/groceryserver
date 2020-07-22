@@ -4,13 +4,14 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
     {
-        userid:{
-            type:String,
-            require:true
+        user:{
+            type:Schema.Types.ObjectId,
+            ref:'Customer'
+           
         },
-        productid:{
-            type:String,
-            require:true
+        product:{
+            type:Schema.Types.ObjectId,
+            ref:'Product'
         }
     },
     {

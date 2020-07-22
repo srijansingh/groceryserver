@@ -3,7 +3,7 @@ const Subcategory = require('../model/subcategory');
 const Product = require('../model/product');
 const Customer = require('../model/customer');
 const Order = require('../model/order');
-
+const {validationResult} = require("express-validator");
 
 //Signup
 
@@ -39,8 +39,8 @@ exports.createCustomer = (req, res, next) => {
     user.save()
     .then(result => {
         res.status(201).json({
-            message : 'User created',
-            userId : result.userid
+            message : 'User created'
+           
         })
     })
     .catch(err => {

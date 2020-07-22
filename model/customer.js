@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const customerSchema = new Schema(
     {
-        userid: {
-            type: String,
-            required:true
-        },
         mobile : {
             type : String
         },
@@ -27,7 +24,11 @@ const customerSchema = new Schema(
         },
         state : {
             type:String
-        }
+        },
+        orders : [{
+            type : Schema.Types.ObjectId,
+            ref : 'Order'
+        }]
     },
     {
         timestamps:true

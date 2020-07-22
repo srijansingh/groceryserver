@@ -61,7 +61,7 @@ exports.login = (req, res, next) => {
             email:loadeduser.email,
             userId:loadeduser._id.toString()
         }, 
-        'supersecret', 
+        'dholpurkasecret', 
         {expiresIn: '1h'}
         );
         res.status(200).json({token:token, userId:loadeduser._id.toString(), email:loadeduser.email})
