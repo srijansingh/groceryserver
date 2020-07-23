@@ -4,7 +4,8 @@ const Product = require('../model/product');
 const Customer = require('../model/customer');
 const Order = require('../model/order');
 const {validationResult} = require("express-validator");
-
+const Cart = require('../model/cart');
+const jwt = require('jsonwebtoken');
 //Signup
 
 
@@ -53,9 +54,41 @@ exports.createCustomer = (req, res, next) => {
 }
 
 
-//signupend
+//signupend 5f1846bb2324d526045effa0
 
+exports.loginCustomer = (req, res, next) => {
+    const mobile = req.body.mobile;
+    
+    Customer.findOne({mobile:mobile})
+    .then(user => {
+        if(!user){
+            const error = new Error('USER DOES NOT EXIST');
+            error.statusCode = 401;
+            throw error;
+        }
+        loaduser = user;
+        return loaduser;
+    })
+    .then(loadeduser => {
+        const token = jwt.sign({
+            name:loaduser.name,
+            mobile:loadeduser.mobile,
+            userId:loadeduser._id.toString()
+        }, 
+        'dholpurkasecretwalasecret', 
+        {expiresIn: '7 days'}
+        );
+        res.status(200).json({token:token,name:loadeduser.name, userId:loadeduser._id.toString()})
+    })
+    .catch(err => {
+        if(!err.statusCode){
+            err.statusCode = 500;
+        }
+        next(err);
+    })
+}
 
+//Login user
 
 exports.getCategory = (req, res, next) => {
     Category.find()
@@ -177,8 +210,76 @@ exports.getProductBySubcategory= (req, res, next) => {
 
 //Cart
 
+exports.createCart = (req, res, next) => {
+    const user = req.body.userid;
+    const product = req.body.productid;
+    
+    Product.findById(product)
+    .then(result => {
+        console.log("Result : "+result)
+        const sku = result.sku;
+        const title = result.title;
+        const imageurl = result.imageurl;
+        const costprice = result.costprice;
+        const sellingprice = result.sellingprice;
+
+        const list = new Cart({
+            userid:user,
+            productid:product,
+            sku:sku,
+            title:title,
+            imageurl:imageurl,
+            costprice:costprice,
+            sellingprice:sellingprice
+        })
+
+        list.save()
+        .then(result => {
+            res.status(200).json({
+                message:"Added to Cart",
+                data:result
+            })
+    })   
+    
+    })
+
+    
+    
+}
+
+exports.getCartProductByUserId = (req, res, next) => {
+    const user  = req.params.userid;
+    const productdata = [];
+        Cart.find({"userid":`${user}`})
+        .then(result => {
+            if(!result){
+                const error = new Error('Could not find');
+                error.statusCode = 404;
+                throw error;
+            }
+            res.status(200).json({
+                data:result
+            })
+        })
+        
+}
 
 
+exports.deleteCartById = (req,res,next) => {
+    const _id = req.params._id;
+    Cart.findByIdAndRemove(_id)
+    .then(result => {
+        res.status(200).json({
+            data:'Deleted successfully'
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.json({
+            error:err
+        })
+    })
+}
 
 //Orders
 

@@ -4,7 +4,8 @@ const {body} = require('express-validator');
 const {
     getCategory,getSubcategoryByCategory,getProductByCategory,
     getProduct, getProductById,getProductBySubcategory,
-    createCustomer
+    createCustomer,loginCustomer,
+    createCart,getCartProductByUserId, deleteCartById
 } = require('../controller/client');
 
 const Customer = require('../model/customer');
@@ -48,6 +49,8 @@ router.put('/signup', [
 ], createCustomer);
 
 
+router.post('/login', loginCustomer);
+
 //Category
 
 router.get('/category', getCategory);
@@ -57,5 +60,8 @@ router.get('/product/:_id', getProductById);
 router.get('/product/category/:_id', getProductByCategory);
 router.get('/product/sub/:_id', getProductBySubcategory);
 
+router.post('/cart', createCart);
+router.get('/cart/:userid', getCartProductByUserId);
+router.get('/cart/:_id', deleteCartById);
 
 module.exports = router;

@@ -4,14 +4,36 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
     {
-        user:{
+        userid:{
             type:Schema.Types.ObjectId,
-            ref:'Customer'
+            ref:'Customer',
+            require:true
            
         },
-        product:{
+        productid:{
             type:Schema.Types.ObjectId,
-            ref:'Product'
+            ref:'Product',
+            require:true
+        },
+        sku: {
+            type:String,
+            required: true
+        },
+        title: {
+            type:String,
+            required: true
+        },
+        imageurl:{
+            type:String,
+            required: true
+        },
+        costprice: {
+            type:String,
+            required: true
+        },
+        sellingprice: {
+            type:String,
+            required: true
         }
     },
     {
