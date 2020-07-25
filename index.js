@@ -1,5 +1,5 @@
 const port = process.env.PORT || 8001;
-
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -11,6 +11,7 @@ const isAdmin = require('./middleware/isAdmin');
 
 
 const app = express();
+app.use(cors())
 
 app.use(bodyParser.json()); 
 
@@ -23,11 +24,11 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/auth', authRoute);
-app.use('/admin',isAdmin, adminRoute);
+app.use('/admin', isAdmin,adminRoute);
 app.use('/api', userRoute);
 app.get('/', (req, res) => res.send('Dholpur Public API'))
 // Routes
-
+ 
 
 app.use((error, req, res, next) => {
     console.log(error);
