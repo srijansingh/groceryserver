@@ -211,7 +211,7 @@ exports.updateProduct = (req, res, next) => {
 
 exports.deleteProductById = (req,res,next) => {
     const _id = req.params._id;
-    Subcategory.findByIdAndRemove(_id)
+    Product.findByIdAndRemove(_id)
     .then(result => {
         res.status(200).json({
             data:'Deleted successfully'
