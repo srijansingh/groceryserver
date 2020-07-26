@@ -282,6 +282,63 @@ exports.deleteCartById = (req,res,next) => {
 }
 
 //Orders
+exports.createOrder = (req, res, next) => {
+    const user  = req.body.userid;
+    const referenceid = req.body.referenceid;
+    const totalcost = req.body.totalcost;
+    
+    Customer.findById(user)
+    .then(result => {
+        const address = result.address + ' ' + result.city + ' ' + result.state + ' ' + result.pincode
+        const mobile = result.mobile;
+        Cart.find({"userid":`${result._id}`})
+        .then(response => {
+            const productid = response.map(list => {
+                return list._id
+            }).join(',');
+
+            const sku = response.map(list => {
+                return list.sku
+            }).join(',');
+
+            const titles = response.map(list => {
+            return list.title
+            }).join(',')
+
+            const imageurls = response.map(list => {
+                return list.imageurl
+            }).join(',')
+
+
+            // console.log({user, productid, referenceid, totalcost, sku, titles, imageurls, address, mobile});
+
+            const list = new Order({
+                userid:user,
+                productid:productid,
+                referenceid:referenceid,
+                totalcost:totalcost,
+                sku:sku,
+                titles:titles,
+                imageurls:imageurls,
+                address:address,
+                mobile:mobile
+            })
+
+            list.save()
+            .then(result => {
+                console.log(result);
+                res.status(200).json({
+                    message:'Order Successfully Placed',
+                    data:result
+                })
+            })
+        })
+    })
+   
+}
+
+
+
 
 exports.getOrdersById = (req, res, next) => {
     const _id = req.params._id;

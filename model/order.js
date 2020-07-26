@@ -4,22 +4,42 @@ const Schema = mongoose.Schema;
 
 const schema = new Schema(
     {
-        user : {
+        userid : {
             type: Schema.Types.ObjectId,
             ref: 'Customer',
             require : true
         },
-        refid:{
+        productid:{
             type:String,
             require:true
         },
-        productid:{
+        referenceid:{
             type:String,
             require:true
         },
         totalcost:{
             type:String,
             require:true
+        },
+        sku:{
+            type:String,
+            require:true 
+        },
+        titles:{
+            type:String,
+            require:true 
+        },
+        imageurls:{
+            type:String,
+            require:true 
+        },
+        mobile:{
+            type:String,
+            require:true 
+        },
+        address:{
+            type:String,
+            require:true 
         },
         status:{
             type:String,
