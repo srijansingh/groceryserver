@@ -270,7 +270,7 @@ exports.deleteCartById = (req,res,next) => {
     Cart.findByIdAndRemove(_id)
     .then(result => {
         res.status(200).json({
-            data:'Deleted successfully'
+            data:'Removed successfully'
         })
     })
     .catch(err => {
@@ -340,9 +340,9 @@ exports.createOrder = (req, res, next) => {
 
 
 
-exports.getOrdersById = (req, res, next) => {
-    const _id = req.params._id;
-    Order.findById(_id)
+exports.getOrdersByUserId = (req, res, next) => {
+    const userid = req.params.userid;
+    Order.find({"userid":`${userid}`})
     .then(result => {
         if(!result){
             const error = new Error('Could not find');
