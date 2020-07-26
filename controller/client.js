@@ -17,7 +17,7 @@ exports.createCustomer = (req, res, next) => {
         throw error;
     }
 
-    const userid = req.body.userid;
+    const userid = req.body.mobile;
     const mobile = req.body.mobile;
     const email = req.body.email;
     const name = req.body.name;

@@ -186,7 +186,10 @@ exports.getProductById = (req, res, next) => {
 
 exports.updateProduct = (req, res, next) => {
     const _id = req.body.id;
-    const status = req.body.status;
+    const title = req.body.title;
+    const costprice = req.body.costprice;
+    const sellingprice = req.body.sellingprice;
+    const description = req.body.description;
     Product.findById(_id)
     .then(result => {
       if(!result){
@@ -194,7 +197,11 @@ exports.updateProduct = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      result.status = status;
+      result.title = title;
+      result.costprice = costprice;
+      result.sellingprice = sellingprice;
+      result.description = description;
+
       return result.save();
     })
     .then(result => {
