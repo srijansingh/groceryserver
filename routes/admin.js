@@ -6,7 +6,8 @@ const {
     createSubcategory,getSubcategory,deleteSubcategoryById,
     createProduct, getProduct, getProductById, updateProduct, deleteProductById,
     getOrders,updateOrder,
-    getAllCustomer
+    getAllCustomer,
+    getOrderById
 } = require('../controller/admin');
 
 const router = express.Router();
@@ -30,6 +31,7 @@ router.delete('/product/:_id', deleteProductById);
 
 //Order
 router.get('/order', getOrders);
+router.get('/order/:id', getOrderById);
 router.put('/order', updateOrder);
 
 router.get('/customer', getAllCustomer)

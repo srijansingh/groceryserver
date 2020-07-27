@@ -244,6 +244,32 @@ exports.getOrders = (req, res, next) => {
     })
 }
 
+exports.getOrderById = (req, res, next) => {
+    const id = req.params.id;
+
+    Order.findById(id)
+    .then(result => {
+        if(!result){
+          const error = new Error('Could not find');
+          error.statusCode = 404;
+          throw error;
+        }
+        
+        return result;
+      })
+      .then(result => {
+        res.status(200).json({
+          data : result
+        })
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(404).json({
+            error:err
+        })
+      })
+}
+
 exports.updateOrder = (req,res,next) => {
     const id = req.body.id;
     const status = req.body.status;
@@ -267,6 +293,7 @@ exports.updateOrder = (req,res,next) => {
       console.log(err)
     })
   }
+
 
 
 //Customer
