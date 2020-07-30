@@ -9,6 +9,15 @@ const jwt = require('jsonwebtoken');
 //Signup
 
 
+//Mesage
+
+const accountSid = 'AC3d01a64325cc821c8e950fdf445582be';
+const authToken = 'dba4ce4c7445832748c8ae056ccbe8e7';
+const client = require('twilio')(accountSid, authToken);
+
+
+//Message
+
 exports.createCustomer = (req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -286,6 +295,9 @@ exports.createOrder = (req, res, next) => {
     const user  = req.body.userid;
     const referenceid = req.body.referenceid;
     const totalcost = req.body.totalcost;
+    // const user = '5f1846bb2324d526045effa0';
+    // const referenceid = '457894445786756';
+    // const totalcost = '150'
     
     Customer.findById(user)
     .then(result => {
@@ -327,11 +339,24 @@ exports.createOrder = (req, res, next) => {
             list.save()
             .then(result => {
                 console.log(result);
+                
+                client.messages
+                .create({
+                    body: 'You have recieved new order for ' + result.titles + ' from ' + result.address + ', ' + result.mobile + ' with RefID : ' + result.referenceid,
+                    from: '+19564652103',
+                    to: '+918707849506'
+                })
+                .then(message => console.log(" Message " + message.sid));
+                
+
                 res.status(200).json({
                     message:'Order Successfully Placed',
                     data:result
                 })
+
+               
             })
+            
         })
     })
    
