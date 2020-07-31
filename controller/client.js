@@ -47,11 +47,23 @@ exports.createCustomer = (req, res, next) => {
     });
 
     user.save()
-    .then(result => {
+    .then(loadeduser => {
+        const token = jwt.sign({
+            name:loadeduser.name,
+            mobile:loadeduser.mobile,
+            userId:loadeduser._id.toString()
+        }, 
+        'dholpurclientsecretwalasecret', 
+        {expiresIn: '7 days'}
+        );
+        
         res.status(201).json({
-            message : 'User created'
-           
+            message : 'User created',
+            token:token,
+            name:loadeduser.name, 
+            userId:loadeduser._id.toString()
         })
+
     })
     .catch(err => {
         if(!err.statusCode){
@@ -80,7 +92,7 @@ exports.loginCustomer = (req, res, next) => {
     })
     .then(loadeduser => {
         const token = jwt.sign({
-            name:loaduser.name,
+            name:loadeduser.name,
             mobile:loadeduser.mobile,
             userId:loadeduser._id.toString()
         }, 
