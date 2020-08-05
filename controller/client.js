@@ -74,7 +74,15 @@ exports.createCustomer = (req, res, next) => {
 
 }
 
-
+exports.getCoustumerById = (req, res, next) => {
+    const _id = req.params._id;
+    Customer.findById(_id)
+    .then(result => {
+        res.status(200).json({
+            data:result
+        })
+    })
+}
 //signupend 5f1846bb2324d526045effa0
 
 exports.loginCustomer = (req, res, next) => {

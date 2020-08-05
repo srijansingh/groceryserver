@@ -6,7 +6,7 @@ const {
     getProduct, getProductById,getProductBySubcategory,
     createCustomer,loginCustomer,
     createCart,getCartProductByUserId, deleteCartById,
-    createOrder,getOrdersByUserId
+    createOrder,getOrdersByUserId,getCoustumerById
 } = require('../controller/client');
 
 const Customer = require('../model/customer');
@@ -67,5 +67,5 @@ router.get('/cart/:_id', deleteCartById);
 
 router.post('/order', createOrder);
 router.get('/order/:userid', getOrdersByUserId);
-
+router.get('/user/:_id',getCoustumerById)
 module.exports = router;
