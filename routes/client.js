@@ -60,19 +60,7 @@ router.put('/user/:user_id', [
     .isEmail()
     .normalizeEmail(),
     
-    body('mobile')
-    .isNumeric()
-    .isLength(10)
-    .withMessage('Please enter valid number.')
-    .custom((value, {req}) => {
-        return Customer.findOne({mobile: value})
-        .then(userMob => {
-            if(userMob){
-                return Promise.reject('Phone number already exist');
-            }
-        })
-    }),
-
+   
     body('pincode').trim().isLength(6).withMessage('Please enter valid pincode'),
     body('name').trim().not().isEmpty(),
     body('address').trim().not().isEmpty(),
