@@ -6,7 +6,7 @@ const {
     getProduct, getProductById,getProductBySubcategory,
     createCustomer,loginCustomer,
     createCart,getCartProductByUserId, deleteCartById,
-    createOrder,getOrdersByUserId,getCoustumerById
+    createOrder,getOrdersByUserId,getCoustumerById,updateuser
 } = require('../controller/client');
 
 const Customer = require('../model/customer');
@@ -50,6 +50,49 @@ router.put('/signup', [
 ], createCustomer);
 
 
+
+
+
+
+
+router.put('/user/:user_id', [
+    body('email')
+    .isEmail()
+    .withMessage('Please enter a valid email.')
+    .custom((value, {req}) => {
+        return Customer.findOne({email: value})
+        .then(userDoc => {
+            if(userDoc) {
+                return Promise.reject('E-mail already exist');
+            }
+        })
+    })
+    .normalizeEmail(),
+    
+    body('mobile')
+    .isNumeric()
+    .isLength(10)
+    .withMessage('Please enter valid number.')
+    .custom((value, {req}) => {
+        return Customer.findOne({mobile: value})
+        .then(userMob => {
+            if(userMob){
+                return Promise.reject('Phone number already exist');
+            }
+        })
+    }),
+
+    body('pincode').trim().isLength(6).withMessage('Please enter valid pincode'),
+    body('name').trim().not().isEmpty(),
+    body('address').trim().not().isEmpty(),
+    body('city').trim().not().isEmpty(),
+    body('state').trim().not().isEmpty()
+
+], updateuser);
+
+
+
+
 router.post('/login', loginCustomer);
 
 //Category
@@ -68,4 +111,7 @@ router.delete('/cart/:userid', deleteCartById);
 router.post('/order', createOrder);
 router.get('/order/:userid', getOrdersByUserId);
 router.get('/user/:_id',getCoustumerById)
+
+
+router.put('/user/:user_id',updateuser)
 module.exports = router;
