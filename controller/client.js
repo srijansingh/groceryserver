@@ -403,13 +403,13 @@ exports.getOrdersByUserId = (req, res, next) => {
 
 exports.updateuser = (req, res, next) => {
     const _id = req.params.user_id;
-    const mobile = req.body.mobile;
+    const name = req.body.name;
     const email = req.body.email;
     const address = req.body.address;
     const pincode = req.body.pincode;
     const city = req.body.city;
     const  state = req.body.state;
-    const  orders = req.body.orders;
+   
     Customer.findById(_id)
     .then(result => {
       if(!result){
@@ -422,7 +422,7 @@ exports.updateuser = (req, res, next) => {
       result.pincode = pincode;
       result.city = city;
       result.state = state;
-      result.orders= orders;
+      result.name= name;
 
 
       return result.save();
