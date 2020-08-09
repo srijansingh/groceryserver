@@ -63,7 +63,7 @@ router.get('/product/sub/:_id', getProductBySubcategory);
 
 router.post('/cart', createCart);
 router.get('/cart/:userid', getCartProductByUserId);
-router.get('/cart/:_id', deleteCartById);
+router.delete('/cart/:userid', deleteCartById);
 
 router.post('/order', createOrder);
 router.get('/order/:userid', getOrdersByUserId);

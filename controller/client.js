@@ -295,8 +295,8 @@ exports.getCartProductByUserId = (req, res, next) => {
 
 
 exports.deleteCartById = (req,res,next) => {
-    const _id = req.params._id;
-    Cart.findByIdAndRemove(_id)
+    const userid = req.params.userid;
+    Cart.remove({userid:`${userid}`})
     .then(result => {
         res.status(200).json({
             data:'Removed successfully'
