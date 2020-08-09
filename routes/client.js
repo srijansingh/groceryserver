@@ -58,15 +58,6 @@ router.put('/signup', [
 router.put('/user/:user_id', [
     body('email')
     .isEmail()
-    .withMessage('Please enter a valid email.')
-    .custom((value, {req}) => {
-        return Customer.findOne({email: value})
-        .then(userDoc => {
-            if(userDoc) {
-                return Promise.reject('E-mail already exist');
-            }
-        })
-    })
     .normalizeEmail(),
     
     body('mobile')
