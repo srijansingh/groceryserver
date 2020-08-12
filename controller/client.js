@@ -309,6 +309,21 @@ exports.deleteCartById = (req,res,next) => {
         })
     })
 }
+exports.deletesingleById = (req,res,next) => {
+    const id = req.params.id;
+    Cart.findByIdAndRemove(id)
+    .then(result => {
+        res.status(200).json({
+            data:'Removed successfully'
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.json({
+            error:err
+        })
+    })
+}
 
 //Orders
 exports.createOrder = (req, res, next) => {

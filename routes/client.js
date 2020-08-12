@@ -6,7 +6,7 @@ const {
     getProduct, getProductById,getProductBySubcategory,
     createCustomer,loginCustomer,
     createCart,getCartProductByUserId, deleteCartById,
-    createOrder,getOrdersByUserId,getCoustumerById,updateuser
+    createOrder,getOrdersByUserId,getCoustumerById,updateuser,deletesingleById 
 } = require('../controller/client');
 
 const Customer = require('../model/customer');
@@ -86,6 +86,7 @@ router.get('/product/sub/:_id', getProductBySubcategory);
 router.post('/cart', createCart);
 router.get('/cart/:userid', getCartProductByUserId);
 router.delete('/cart/:userid', deleteCartById);
+router.delete('/singlecart/:id',deletesingleById )
 
 router.post('/order', createOrder);
 router.get('/order/:userid', getOrdersByUserId);
