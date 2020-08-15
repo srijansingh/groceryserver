@@ -105,13 +105,11 @@ exports.loginCustomer = (req, res, next) => {
         "dholpurkasecretwalasecret",
         { expiresIn: "7 days" }
       );
-      res
-        .status(200)
-        .json({
-          token: token,
-          name: loadeduser.name,
-          userId: loadeduser._id.toString(),
-        });
+      res.status(200).json({
+        token: token,
+        name: loadeduser.name,
+        userId: loadeduser._id.toString(),
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -458,6 +456,17 @@ exports.updateuser = (req, res, next) => {
     });
 };
 
-//Customer
-
+//Search
+exports.getSearchResult = (req, res, next) => {
+  const searchItem = req.body.search;
+  Product.find({ $text: { $search: `${searchItem}` } })
+    .then((result) => {
+      res.status(200).json({
+        data: result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 //Counting
