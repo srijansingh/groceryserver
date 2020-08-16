@@ -321,12 +321,13 @@ exports.deleteProductById = (req, res, next) => {
 //Orders
 
 exports.getOrders = (req, res, next) => {
-  Order.find().sort({ _id: -1 });
-  then((result) => {
-    res.status(200).json({
-      data: result,
+  Order.find()
+    .sort({ _id: -1 })
+    .then((result) => {
+      res.status(200).json({
+        data: result,
+      });
     });
-  });
 };
 
 exports.getProcessingOrder = (req, res, next) => {
