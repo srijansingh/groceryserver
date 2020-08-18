@@ -7,7 +7,6 @@ const Order = require("../model/order");
 exports.createCategory = (req, res, next) => {
   const category = req.body.category;
   const imageurl = req.body.imageurl;
-
   const list = new Category({
     category: category,
     imageurl: imageurl,
@@ -323,6 +322,7 @@ exports.deleteProductById = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   Order.find()
     .sort({ _id: -1 })
+    .distinct("referenceid")
     .then((result) => {
       res.status(200).json({
         data: result,
@@ -333,6 +333,7 @@ exports.getOrders = (req, res, next) => {
 exports.getProcessingOrder = (req, res, next) => {
   Order.find({ status: "processing" })
     .sort({ _id: -1 })
+    .distinct("referenceid")
     .then((result) => {
       res.status(200).json({
         data: result,
@@ -343,6 +344,7 @@ exports.getProcessingOrder = (req, res, next) => {
 exports.getShippedOrder = (req, res, next) => {
   Order.find({ status: "shipped" })
     .sort({ _id: -1 })
+    .distinct("referenceid")
     .then((result) => {
       res.status(200).json({
         data: result,
@@ -353,6 +355,7 @@ exports.getShippedOrder = (req, res, next) => {
 exports.getDeliveredOrder = (req, res, next) => {
   Order.find({ status: "delivered" })
     .sort({ _id: -1 })
+    .distinct("referenceid")
     .then((result) => {
       res.status(200).json({
         data: result,
@@ -363,7 +366,7 @@ exports.getDeliveredOrder = (req, res, next) => {
 exports.getOrderById = (req, res, next) => {
   const id = req.params.id;
 
-  Order.findById(id)
+  Order.find({ referenceid: `${id}` })
     .sort({ _id: -1 })
     .then((result) => {
       if (!result) {
@@ -390,16 +393,11 @@ exports.getOrderById = (req, res, next) => {
 exports.updateOrder = (req, res, next) => {
   const id = req.body.id;
   const status = req.body.status;
-  Order.findById(id)
-    .then((result) => {
-      if (!result) {
-        const error = new Error("Could not find");
-        error.statusCode = 404;
-        throw error;
-      }
-      result.status = status;
-      return result.save();
-    })
+  Order.update(
+    { referenceid: `${id}` },
+    { $set: { status: `${status}` } },
+    { multi: true }
+  )
     .then((result) => {
       res.status(200).json({
         message: "Successfully updated",
