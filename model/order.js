@@ -30,6 +30,10 @@ const schema = new Schema(
       type: String,
       required: true,
     },
+    sellingprice: {
+      type: String,
+      required: true,
+    },
     titles: {
       type: String,
       require: true,

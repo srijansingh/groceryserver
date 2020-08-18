@@ -344,7 +344,7 @@ exports.createOrder = (req, res, next) => {
           const productid = list.productid;
           const sku = list.sku;
           const titles = list.title;
-          const imageurls = list.imageurls;
+          const imageurls = list.imageurl;
           const sellingprice = list.sellingprice;
           const quantity = list.quantity;
 
@@ -363,8 +363,7 @@ exports.createOrder = (req, res, next) => {
           });
 
           lists.save().then((result) => {
-            // console.log(result);
-            data.push(result);
+            console.log(result);
           });
         });
       })
@@ -396,7 +395,8 @@ exports.createOrder = (req, res, next) => {
 exports.getOrdersByUserId = (req, res, next) => {
   const userid = req.params.userid;
   Order.find({ userid: `${userid}` })
-    .sort({ _id: -1 })
+    .sort({ referenceid: 1 })
+    .distinct("referenceid")
     .then((result) => {
       if (!result) {
         const error = new Error("Could not find");
