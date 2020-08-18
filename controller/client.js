@@ -346,7 +346,7 @@ exports.createOrder = (req, res, next) => {
           const titles = list.title;
           const imageurls = list.imageurls;
           const sellingprice = list.sellingprice;
-          const quantity = "1";
+          const quantity = list.quantity;
 
           const lists = new Order({
             userid: user,
