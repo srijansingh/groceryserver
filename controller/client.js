@@ -242,6 +242,7 @@ exports.getProductBySubcategory = (req, res, next) => {
 exports.createCart = (req, res, next) => {
   const user = req.body.userid;
   const product = req.body.productid;
+  const quantity = req.body.quantity;
 
   Product.findById(product).then((result) => {
     console.log("Result : " + result);
@@ -254,6 +255,7 @@ exports.createCart = (req, res, next) => {
     const list = new Cart({
       userid: user,
       productid: product,
+      quantity: quantity,
       sku: sku,
       title: title,
       imageurl: imageurl,
@@ -323,73 +325,61 @@ exports.createOrder = (req, res, next) => {
   const user = req.body.userid;
   const referenceid = req.body.referenceid;
   const totalcost = req.body.totalcost;
-  // const user = '5f1846bb2324d526045effa0';
-  // const referenceid = '457894445786756';
-  // const totalcost = '150'
+  const data = [];
 
   Customer.findById(user).then((result) => {
     const address =
       result.address +
-      " " +
+      ", " +
       result.city +
-      " " +
+      ", " +
       result.state +
-      " " +
+      ", " +
       result.pincode;
     const mobile = result.mobile;
-    Cart.find({ userid: `${result._id}` }).then((response) => {
-      const productid = response
-        .map((list) => {
-          return list._id;
-        })
-        .join(",");
 
-      const sku = response
-        .map((list) => {
-          return list.sku;
-        })
-        .join(",");
+    Cart.find({ userid: `${result._id}` })
+      .then((response) => {
+        response.map((list, index) => {
+          const productid = list.productid;
+          const sku = list.sku;
+          const titles = list.title;
+          const imageurls = list.imageurls;
+          const sellingprice = list.sellingprice;
+          const quantity = "1";
 
-      const titles = response
-        .map((list) => {
-          return list.title;
-        })
-        .join(",");
+          const lists = new Order({
+            userid: user,
+            productid: productid,
+            sku: sku,
+            titles: titles,
+            imageurls: imageurls,
+            sellingprice: sellingprice,
+            quantity: quantity,
+            referenceid: referenceid,
+            totalcost: totalcost,
+            address: address,
+            mobile: mobile,
+          });
 
-      const imageurls = response
-        .map((list) => {
-          return list.imageurl;
-        })
-        .join(",");
-
-      // console.log({user, productid, referenceid, totalcost, sku, titles, imageurls, address, mobile});
-
-      const list = new Order({
-        userid: user,
-        productid: productid,
-        referenceid: referenceid,
-        totalcost: totalcost,
-        sku: sku,
-        titles: titles,
-        imageurls: imageurls,
-        address: address,
-        mobile: mobile,
-      });
-
-      list.save().then((result) => {
-        console.log(result);
+          lists.save().then((result) => {
+            // console.log(result);
+            data.push(result);
+          });
+        });
+      })
+      .then((result) => {
+        console.log(data);
 
         client.messages
           .create({
             body:
-              "You have recieved new order for " +
-              result.titles +
+              "You have recieved new order with Reference ID #" +
+              referenceid +
               " from " +
-              result.address +
-              ", " +
-              result.mobile +
-              " with RefID : " +
-              result.referenceid,
+              address +
+              ",   " +
+              mobile,
             from: "+19564652103",
             to: "+918707849506",
           })
@@ -400,13 +390,28 @@ exports.createOrder = (req, res, next) => {
           data: result,
         });
       });
-    });
   });
 };
 
 exports.getOrdersByUserId = (req, res, next) => {
   const userid = req.params.userid;
   Order.find({ userid: `${userid}` })
+    .sort({ _id: -1 })
+    .then((result) => {
+      if (!result) {
+        const error = new Error("Could not find");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({
+        data: result,
+      });
+    });
+};
+
+exports.getOrdersByUserIdAndUserid = (req, res, next) => {
+  const refid = req.params.refid;
+  Order.find({ referenceid: `${refid}` })
     .sort({ _id: -1 })
     .then((result) => {
       if (!result) {

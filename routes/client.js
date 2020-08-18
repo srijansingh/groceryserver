@@ -19,6 +19,7 @@ const {
   updateuser,
   deletesingleById,
   getSearchResult,
+  getOrdersByUserIdAndUserid,
 } = require("../controller/client");
 
 const Customer = require("../model/customer");
@@ -101,7 +102,7 @@ router.delete("/singlecart/:id", deletesingleById);
 router.post("/order", createOrder);
 router.get("/order/:userid", getOrdersByUserId);
 router.get("/user/:_id", getCoustumerById);
-
+router.get("/singleorder/:refid", getOrdersByUserIdAndUserid);
 router.put("/user/:user_id", updateuser);
 
 router.post("/search", getSearchResult);
