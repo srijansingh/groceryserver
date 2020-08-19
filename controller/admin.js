@@ -3,6 +3,7 @@ const Subcategory = require("../model/subcategory");
 const Product = require("../model/product");
 const Customer = require("../model/customer");
 const Order = require("../model/order");
+const Brand = require("../model/brand");
 
 exports.createCategory = (req, res, next) => {
   const category = req.body.category;
@@ -51,6 +52,59 @@ exports.deleteCategoryById = (req, res, next) => {
     });
 };
 
+//Branded Content
+
+exports.createBrand = (req, res, next) => {
+  const title = req.body.title;
+  const categoryid = req.body.categoryid;
+  const imageurl = req.body.imageurl;
+  let cat;
+  const list = new Brand({
+    title: title,
+    category: categoryid,
+    imageurl: imageurl,
+  });
+
+  list.save().then((result) => {
+    res.status(200).json({
+      message: "Brand Added",
+      data: result,
+      category: cat,
+    });
+  });
+};
+
+exports.getBrand = (req, res, next) => {
+  Brand.find()
+    .sort({ _id: -1 })
+    .then((result) => {
+      res.status(200).json({
+        data: result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({
+        error: err,
+      });
+    });
+};
+
+exports.deleteBrandById = (req, res, next) => {
+  const _id = req.params._id;
+  Brand.findByIdAndRemove(_id)
+    .then((result) => {
+      res.status(200).json({
+        data: "Deleted successfully",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({
+        error: err,
+      });
+    });
+};
 //Subcategory
 
 exports.createSubcategory = (req, res, next) => {

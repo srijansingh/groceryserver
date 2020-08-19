@@ -23,6 +23,9 @@ const {
   getProcessingOrder,
   getDeliveredOrder,
   getShippedOrder,
+  createBrand,
+  getBrand,
+  deleteBrandById,
 } = require("../controller/admin");
 
 const router = express.Router();
@@ -56,6 +59,11 @@ router.put("/order", updateOrder);
 router.get("/processing", getProcessingOrder);
 router.get("/delivered", getDeliveredOrder);
 router.get("/shipped", getShippedOrder);
+
+//Brand
+router.post("/brand", createBrand);
+router.get("/brand", getBrand);
+router.delete("/brand/:_id", deleteBrandById);
 
 router.get("/customer", getAllCustomer);
 

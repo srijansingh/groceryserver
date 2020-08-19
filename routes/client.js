@@ -23,6 +23,7 @@ const {
 } = require("../controller/client");
 
 const Customer = require("../model/customer");
+const { getBrand } = require("../controller/admin");
 const router = express.Router();
 
 //Signup
@@ -86,7 +87,7 @@ router.put(
 router.post("/login", loginCustomer);
 
 //Category
-
+router.get("/brand", getBrand);
 router.get("/category", getCategory);
 router.get("/category/:_id", getSubcategoryByCategory);
 router.get("/product", getProduct);
