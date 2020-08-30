@@ -3,6 +3,7 @@ const Subcategory = require("../model/subcategory");
 const Product = require("../model/product");
 const Customer = require("../model/customer");
 const Order = require("../model/order");
+const Brand = require("../model/brand");
 const { validationResult } = require("express-validator");
 const Cart = require("../model/cart");
 const jwt = require("jsonwebtoken");
@@ -139,7 +140,7 @@ exports.getCategory = (req, res, next) => {
 
 exports.getProductByCategory = (req, res, next) => {
   const category = req.params._id;
-  Product.find({ category: `${category}` })
+  Product.find({ category: `${category}`, status: "active" })
     .sort({ _id: -1 })
     .then((result) => {
       if (!result) {
@@ -185,7 +186,7 @@ exports.getSubcategoryByCategory = (req, res, next) => {
 //Product
 
 exports.getProduct = (req, res, next) => {
-  Product.find()
+  Product.find({ status: "active" })
     .sort({ _id: -1 })
     .then((result) => {
       res.status(200).json({
@@ -380,7 +381,7 @@ exports.createOrder = (req, res, next) => {
               ",   " +
               mobile,
             from: "+19564652103",
-            to: "+918707849506",
+            to: "+919461503768",
           })
           .then((message) => console.log(" Message " + message.sid));
 
